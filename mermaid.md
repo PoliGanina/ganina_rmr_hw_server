@@ -4,33 +4,57 @@ sequenceDiagram
     actor User
     participant client
     participant server
+    participant DB
 
     User->>client: types email/tel & password 
 
     critical Client-side validation
         client->>User: result of validation
-    option verification failed
+    option failed
         client->>User: error label with validation rules
-    option verification OK
+    option success
         client->>User: style form like OK (enable Login button)
     end
 
     User->>client: submit login
 
-    client->>server: data verification with DB
+    critical Server-side validation
+        client->>server: GET data from DB
+        server->>DB: request data 
+        DB->>server: JSON
+    option failed
+        server->>client: status 401
+        client->>User: "access denied :-(" / "incorrect password"
+    option success
+        server->>client: cookies & picture of cat
+        client->>User: render cat.jpg
+    end
+
+   
+    server->>client: status 200 (ok)
+    client->>client: match login data with data array
+
+    alt invalid data & no cookies
+            
+        else password doesn't match tel/email 
+            client->>User: "incorrect password"
+        else valid data
+            
+    end    
+```
+
+```mermaid
+sequenceDiagram
+%% validation form
+actor User 
+
+    
 
     alt server didn't reply (err 500)
         client->>User: "something went wrong, pls try again later"
 
     else server replied
-        alt invalid data & no cookies (err 401)
-            client->>User: "access denied :-("
-        else password doesn't match tel/email 
-            client->>User: "incorrect password"
-        else valid data
-            server->>client: cookies
-            server->>User: render cat.jpg
-        end
+        
     end
-    
+
 ```
