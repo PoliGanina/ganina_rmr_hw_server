@@ -26,35 +26,8 @@ sequenceDiagram
         server->>client: status 401
         client->>User: "access denied :-(" / "incorrect password"
     option success
-        server->>client: cookies & picture of cat
+        server->>client: status 200, cookies & picture of cat
         client->>User: render cat.jpg
-    end
-
-   
-    server->>client: status 200 (ok)
-    client->>client: match login data with data array
-
-    alt invalid data & no cookies
-            
-        else password doesn't match tel/email 
-            client->>User: "incorrect password"
-        else valid data
-            
-    end    
-```
-
-```mermaid
-sequenceDiagram
-%% validation form
-actor User 
-
-    
-
-    alt server didn't reply (err 500)
-        client->>User: "something went wrong, pls try again later"
-
-    else server replied
-        
     end
 
 ```
