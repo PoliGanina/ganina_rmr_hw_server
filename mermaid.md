@@ -19,7 +19,7 @@ sequenceDiagram
     User->>client: submit login
 
     alt Server-side validation
-        client->>server: POST data from DB
+        client->>server: POST data to DB
         server->>DB: request data 
         DB->>server: JSON
         server->>server: validation
