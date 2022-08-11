@@ -19,7 +19,7 @@ sequenceDiagram
     User->>client: submit login
 
     alt Server-side validation
-        client->>server: POST data to DB
+        client->>server: POST /auth
         server->>DB: request data 
         DB->>server: JSON
         server->>server: validation
@@ -27,8 +27,11 @@ sequenceDiagram
         server->>client: status 401
         client->>User: "access denied :-(" / "incorrect password"
     else success
-        server->>client: status 200, cookies & picture of cat
-        client->>User: render cat.jpg
+        server->>client: status 200, Set-cookie;
+        client->>client: redirect to KittyPage;
+        client->>server: cookie validation;
+        server->>client: status 200 & send kitty.jpg;
+        client->>User: render kitty.jpg;
     end
 
 ```
